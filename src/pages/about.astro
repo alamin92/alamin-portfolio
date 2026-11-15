@@ -11,20 +11,82 @@ const skills = [
   },
   {
     group: 'Data',
-    items: ['Oracle', 'Oracle EBS', 'XML Publisher', 'Informatica mapping', 'MySQL', 'PostgreSQL', 'MongoDB', 'SQL Server', 'Hadoop / Spark (trained)'],
+    items: ['Oracle', 'Oracle EBS', 'XML Publisher / RTF templates', 'Informatica mapping', 'MySQL', 'PostgreSQL', 'MongoDB', 'SQL Server', 'Hadoop / Spark (trained)'],
   },
   {
     group: 'Delivery & operations',
-    items: ['Jenkins CI/CD', 'Maven', 'Git / GitHub / GitLab', 'SonarQube', 'ALM / UFT testing', 'ServiceNow', 'Control-M', 'Linux', 'JBoss / Tomcat', 'AWS'],
+    items: ['Jenkins CI/CD', 'DevOps', 'Maven', 'Git / GitHub / GitLab', 'SonarQube', 'ALM / UFT testing', 'Patch & regression testing', 'Batch processing', 'ServiceNow', 'IT service management', 'Control-M', 'Linux', 'JBoss / Tomcat', 'AWS'],
+  },
+  {
+    group: 'Ownership & leadership',
+    items: ['Application ownership', 'Release management', 'Vulnerability remediation', 'Requirements & change analysis', 'SDLC documentation', 'Stakeholder demos', 'Code review', 'Agile / Scrum'],
+  },
+  {
+    group: 'Community & people',
+    items: ['Community outreach', 'Event planning', 'Program coordination', 'Volunteer coordination', 'Web content management', 'Tutoring & teaching'],
   },
   {
     group: 'Creative',
     items: ['Photography', 'Videography', 'Video editing', 'YouTube'],
   },
+];
+
+// How I got here, oldest first.
+const path = [
   {
-    group: 'Community & people',
-    items: ['Event organizing', 'Volunteer coordination', 'Program support', 'Tutoring & teaching'],
+    when: '2011 – 2015',
+    title: 'Burger King and Dunkin\'',
+    text: 'I started out as a kitchen manager at Burger King, then became an assistant manager at Dunkin\'. Running shifts and leading a team taught me how to stay calm when it gets busy.',
   },
+  {
+    when: '2014 – 2020',
+    title: 'College',
+    text: 'Kingsborough Community College first, then a BS in Computer Science at CUNY York College (December 2020, GPA 3.72). On the Dean\'s List along the way.',
+  },
+  {
+    when: '2019 – 2020',
+    title: 'Library Technology Support Assistant, CUNY York College',
+    text: 'Part-time in the York library: kept the printers, PCs and network connections working, helped with system updates, and wrote reports, tracked inventory and worked with the IT technician team.',
+  },
+  {
+    when: '2019 – 2021',
+    title: 'IT Systems and Support, NYC Department of Education',
+    text: 'Part-time: helped my supervisor design coding assignments and projects for students in Google Classroom and Scratch, reviewed code, and troubleshot hardware, software and network issues.',
+  },
+  {
+    when: '2020 – 2021',
+    title: 'CUNY Tech Prep and tutoring',
+    text: 'Selected as one of 183 students out of 400+ applicants for CUNY Tech Prep, a year-long program in React, Node and Express, PostgreSQL, Git, Agile and Scrum, test-driven development and CI/CD. I also tutored computer science through CUNY Tutor Corps.',
+  },
+  {
+    when: '2021 – 2023',
+    title: 'Infosys, Associate Software Developer',
+    text: 'Spring Boot services, REST APIs, API documentation and production batch support.',
+  },
+  {
+    when: 'Since 2023',
+    title: 'United States Postal Service, Computer/Programmer Analyst',
+    text: 'Financial systems on Oracle E-Business Suite, plus the Java, database and CI/CD work around them.',
+  },
+];
+
+const daily = [
+  'Build and test Oracle EBS reports: XML Publisher and RTF templates plus concurrent programs that produce PDF, Excel and HTML output.',
+  'Write PL/SQL stored procedures and database changes for the financial modules.',
+  'Run end-to-end and regression tests with ALM and UFT, and re-test after Linux and database patching.',
+  'Keep batch jobs running on schedule, troubleshoot failures and help with accounting period maintenance.',
+  'Maintain Jenkins CI/CD pipelines and improve code quality with SonarQube.',
+  'Use Kafka producers and consumers to move data coming from the mainframe into tables other teams rely on.',
+  'Handle change requests and incidents in ServiceNow, and renew and verify SSL certificates.',
+];
+
+const honors = [
+  { title: 'Dean\'s List', text: 'Kingsborough Community College and CUNY York College, 2014 to 2020.' },
+  { title: 'CUNY Tech Prep Fellow', text: 'One of 183 students selected from 400+ applicants.' },
+  { title: 'HackerRank group challenge', text: 'Winner, August 2020.' },
+  { title: 'National Mathematics Honor Society', text: 'Member.' },
+  { title: 'Thurgood Marshall College Fund', text: 'TMCF alumni.' },
+  { title: 'York College Male Initiative Program', text: 'Member, 2019 to 2020.' },
 ];
 
 const strengths = [
@@ -36,41 +98,91 @@ const strengths = [
 
 const rules = [
   { title: 'Forgive', text: 'Myself and others. Carrying a grudge costs more than it gives.' },
-  { title: 'Let go', text: 'Ego, greed, overthinking, and anything I can no longer control.' },
+  { title: 'Let go', text: 'Ego, greed, envy, overthinking, stress and anxiety: anything that keeps me from being a better person. Also other people\'s actions and everything else I can no longer control.' },
   { title: 'Give away', text: 'Whatever is holding me back, including my attachment to material things, so there is room for what makes me a better person.' },
   { title: 'Silence', text: 'When the noise gets loud, I stay quiet. If I am angry, I breathe first. Words cannot be taken back, so I choose them carefully.' },
 ];
 ---
 
-<Base title="About" description="About Alamin Hossain: software engineer, community volunteer, organizer and lifelong learner based in New York.">
+<Base title="About" description="About Alamin Hossain: software engineer, community volunteer, organizer and lifelong learner.">
   <div class="page">
     <div class="container">
       <h1>About</h1>
       <p class="lead">
-        I'm a software engineer in New York. I build and look after the financial systems that large
-        organizations depend on, and outside of work I give time to my community, my camera and the trail.
+        I'm a software engineer with the U.S. government, building and maintaining the financial
+        systems that the U.S. Postal Service depends on. Outside of work I give time to my community,
+        my camera and the trail.
       </p>
 
       <h2>Work</h2>
       <p>
-        Since 2021 I've worked in Java, Spring Boot and Oracle PL/SQL. I started at Infosys building
-        Spring Boot services and supporting production batch jobs. Today I'm a computer and
-        programmer analyst at the United States Postal Service, working on financial systems built
-        on Oracle E-Business Suite, plus the Java, database and CI/CD pipelines around them. I studied
-        Computer Science at CUNY York College.
+        Since 2021 I've worked in Java, Spring Boot and Oracle PL/SQL. Today I'm a computer and
+        programmer analyst at the United States Postal Service, working on financial systems built on
+        Oracle E-Business Suite, plus the Java, database and CI/CD pipelines around them.
+      </p>
+      <p>
+        The U.S. Postal Service is an independent agency in the executive branch of the federal
+        government and pays its own way through postage and services. My team builds and maintains
+        the software that handles its financial operations and payments: the money going out, the
+        money coming in, and the records that tie it together.
+      </p>
+      <p>
+        Beyond writing code, I look after the application itself: planning what goes into each
+        release, tracking and fixing vulnerabilities, documenting every change across the SDLC, and
+        walking stakeholders through what changed and why. My day mixes development, DevOps, testing,
+        IT service management and a bit of project management.
       </p>
       <p>
         What I enjoy most is the unglamorous part: taking something messy, finding out why it
-        breaks, and leaving it more reliable than I found it.
+        breaks, and leaving it more reliable than I found it. You can see some of what I've built on
+        the <a href="/projects">Projects page</a>.
       </p>
 
-      <h2>Giving back</h2>
-      <p>
-        I'm a board member at <a href={site.links.foundation} rel="noopener">Resilience USA Foundation</a>,
-        a nonprofit in Queens that runs a monthly food drive, learning programs and community events.
-        I'm proud to be part of it.
-        <a href="/community">Read more about the foundation and my role →</a>
+      <details class="more">
+        <summary>A closer look at my work</summary>
+        <h3>What I do day to day</h3>
+        <ul class="plain">
+          {daily.map((d) => <li>{d}</li>)}
+        </ul>
+        <h3>The finance side</h3>
+        <p class="muted">
+          The platform is Oracle E-Business Suite, which keeps the finance data in one place and gives
+          us ready-made reporting. I touch Accounts Payable (paying suppliers), Accounts Receivable
+          (money owed to the organization), General Ledger (the central financial record) and Fixed
+          Assets (buildings, vehicles and equipment), mostly through reports, database changes and
+          testing.
+        </p>
+      </details>
+
+      <aside class="callout card">
+        <p class="eyebrow">Giving back</p>
+        <h3>Board member, Resilience USA Foundation</h3>
+        <p class="muted">
+          I'm part of a Queens nonprofit that runs a monthly food drive, learning programs and
+          community events. I help with the food drives and events, join the learning programs when
+          I can, and attend the monthly board meetings. I'm proud to be part of it.
+        </p>
+        <p class="links">
+          <a href="/community">More about the foundation and my role →</a>
+          <a href={site.links.foundation} rel="noopener">Visit their website</a>
+        </p>
+      </aside>
+
+      <h2>How I got here</h2>
+      <p class="muted">
+        I took the long way around: a few jobs before software, and a lot of learning on the side.
       </p>
+      <ol class="path">
+        {path.map((p) => (
+          <li>
+            <span class="when">{p.when}</span>
+            <div>
+              <h3>{p.title}</h3>
+              <p class="muted">{p.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
 
       <h2>Skills</h2>
       <div class="skills">
@@ -81,6 +193,24 @@ const rules = [
           </div>
         ))}
       </div>
+
+      <h2>Honors &amp; associations</h2>
+      <div class="grid">
+        {honors.map((h) => (
+          <article class="card">
+            <h3>{h.title}</h3>
+            <p class="muted">{h.text}</p>
+          </article>
+        ))}
+      </div>
+
+      <h2>What drives me</h2>
+      <p>
+        I want a career that keeps challenging me, where I can put my computer science and
+        programming skills to work, communicate well and keep growing. Underneath it all is a simple
+        urge to make the world a little better.
+      </p>
+      <blockquote>Sometimes success depends on how strong the promises are.</blockquote>
 
       <h2>What I'm like</h2>
       <div class="grid">
@@ -120,26 +250,6 @@ const rules = [
         ))}
       </div>
       <p>And above all, I trust in God.</p>
-
-      <h2>Early projects</h2>
-      <p>
-        Things I built while learning, before work took over my keyboard. They're a little rough, and
-        that's the point: this is where I started.
-      </p>
-      <ul class="plain">
-        <li>
-          <strong>TripGram</strong>: a travel web app (React, Express, Sequelize, PostgreSQL, Google
-          Maps API) built with a team of three, where users post about places and look up travel info.
-        </li>
-        <li>
-          <strong>Amazon Clone</strong>: a shopping-style React app with sign-in and account creation.
-          <a href="https://clone-f1489.web.app/" rel="noopener">Try it</a>.
-        </li>
-        <li>
-          <strong>Movie guide</strong>: a small app to keep track of what to watch, including upcoming
-          releases.
-        </li>
-      </ul>
     </div>
   </div>
 </Base>
@@ -147,6 +257,37 @@ const rules = [
 <style>
   .skills { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
   .skills h3 { font-size: 0.95rem; color: var(--muted); font-weight: 600; margin: 0; }
-  .plain { padding-left: 20px; }
-  .plain li { margin-bottom: 10px; }
+
+  .callout { margin: 32px 0 0; border-left: 4px solid var(--accent); }
+  .callout .eyebrow {
+    margin: 0 0 4px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .callout h3 { font-size: 1.2rem; margin: 0 0 8px; }
+  .callout p { margin: 0 0 10px; }
+  .callout .links { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; font-weight: 600; }
+
+  .path { list-style: none; margin: 20px 0 0; padding: 0 0 0 20px; border-left: 2px solid var(--border); }
+  .path li { position: relative; display: grid; gap: 2px 20px; grid-template-columns: 110px 1fr; padding: 0 0 22px; }
+  .path li::before {
+    content: ''; position: absolute; left: -27px; top: 7px; width: 12px; height: 12px;
+    border-radius: 50%; background: var(--accent); border: 2px solid var(--bg);
+  }
+  .path .when { font-size: 0.85rem; font-weight: 600; color: var(--muted); padding-top: 2px; }
+  .path h3 { margin: 0 0 4px; }
+  .path p { margin: 0; }
+  @media (max-width: 560px) {
+    .path li { grid-template-columns: 1fr; }
+  }
+
+  .more { margin: 24px 0 0; border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); padding: 4px 20px 16px; }
+  .more summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
+  .more h3 { margin: 20px 0 8px; font-size: 1.05rem; }
+  .plain { padding-left: 20px; margin: 0; }
+  .plain li { margin-bottom: 8px; }
+
+  blockquote {
+    margin: 20px 0 0; padding: 4px 0 4px 18px; border-left: 3px solid var(--border);
+    font-size: 1.15rem; font-style: italic; color: var(--muted);
+  }
 </style>
