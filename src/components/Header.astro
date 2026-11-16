@@ -28,6 +28,9 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 <script>
   import { audio, soundOn, setSound, ui } from '../scripts/sound';
+  import { visitStart } from '../scripts/visit';
+
+  visitStart(); // starts the "time on site" clock on whichever page someone lands on first
 
   const btn = document.getElementById('sound-toggle') as HTMLButtonElement | null;
   const paint = () => {

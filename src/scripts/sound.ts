@@ -111,7 +111,7 @@ export function tone(o: ToneOptions): void {
 }
 
 /** A burst of filtered noise that sweeps in pitch: whooshes, breath, rustle. */
-export function whoosh(dur: number, from: number, to: number, vol = 0.08, delay = 0): void {
+export function whoosh(dur: number, from: number, to: number, vol = 0.08, delay = 0, peak = 0.35): void {
   const c = audio();
   if (!c || !master) return;
   if (!noiseBuf) {
@@ -130,7 +130,7 @@ export function whoosh(dur: number, from: number, to: number, vol = 0.08, delay 
   f.frequency.exponentialRampToValueAtTime(to, t0 + dur);
   const env = c.createGain();
   env.gain.setValueAtTime(0.0001, t0);
-  env.gain.exponentialRampToValueAtTime(vol, t0 + dur * 0.35);
+  env.gain.exponentialRampToValueAtTime(vol, t0 + dur * peak);
   env.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
   src.connect(f);
   f.connect(env);

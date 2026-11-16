@@ -11,8 +11,6 @@ const skillCount = new Set(skills.flatMap((g) => g.items)).size;
 const stats = [
   { key: 'years', n: new Date().getFullYear() - START_YEAR, suffix: '', label: 'years in software, and counting', color: 'var(--c-about)' },
   { key: 'skills', n: Math.floor(skillCount / 10) * 10, suffix: '+', label: 'tools and skills', color: 'var(--c-work)' },
-  { key: 'babies', n: Math.floor(((Date.now() % 86400000) / 1000) * 4.2), suffix: '', label: 'babies born on Earth so far today (estimate)', color: 'var(--c-arcade)' },
-  { key: 'moon', n: Math.floor((Date.now() - Date.UTC(1969, 6, 20, 20, 17, 40)) / 1000), suffix: '', label: 'seconds since people first walked on the Moon', color: 'var(--c-travel)' },
 ];
 ---
 
@@ -27,12 +25,6 @@ const stats = [
         </div>
       </div>
       <p class="lead">{site.tagline}</p>
-      <div class="fact">
-        <span class="label">Did you know?</span>
-        <span class="text"><span id="fact">{facts[0]}</span><span class="caret" aria-hidden="true"></span></span>
-        <button type="button" class="again" id="fact-next">Another fact →</button>
-      </div>
-
       <div class="doors">
         <a class="door card" href="/about" style="--door: var(--c-about)">
           <span class="emoji" aria-hidden="true">👋</span>
@@ -40,17 +32,17 @@ const stats = [
           <p class="muted">Who I am, how I got here, my skills and what I'm like.</p>
           <span class="go">Read my story →</span>
         </a>
-        <a class="door card" href="/arcade" style="--door: var(--c-arcade)">
-          <span class="emoji" aria-hidden="true">🎮</span>
-          <h2>Hang Out</h2>
-          <p class="muted">Play a game, see where I like to travel, see what I'm into.</p>
-          <span class="go">Let's play →</span>
-        </a>
         <a class="door card" href="/projects" style="--door: var(--c-work)">
           <span class="emoji" aria-hidden="true">🛠️</span>
           <h2>My Work</h2>
           <p class="muted">My projects, my GitHub and how to get in touch.</p>
           <span class="go">Explore →</span>
+        </a>
+        <a class="door card" href="/arcade" style="--door: var(--c-arcade)">
+          <span class="emoji" aria-hidden="true">🎮</span>
+          <h2>Hang Out</h2>
+          <p class="muted">Play a game, see where I like to travel, see what I'm into.</p>
+          <span class="go">Let's play →</span>
         </a>
       </div>
 
@@ -61,7 +53,17 @@ const stats = [
             <span>{x.label}</span>
           </li>
         ))}
+        <li style="--stat: var(--c-arcade)">
+          <b id="visit-time">00:00:00</b>
+          <span>time you've spent here</span>
+        </li>
       </ul>
+
+      <div class="fact">
+        <span class="label">Did you know?</span>
+        <span class="text"><span id="fact">{facts[0]}</span><span class="caret" aria-hidden="true"></span></span>
+        <button type="button" class="again" id="fact-next">Another fact →</button>
+      </div>
 
       <p class="surprise">
         <button type="button" class="btn" id="surprise">Surprise me ✨</button>
@@ -72,6 +74,7 @@ const stats = [
 
 <script>
   import { facts } from '../data/facts';
+  import { elapsedText } from '../scripts/visit';
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -115,18 +118,10 @@ const stats = [
   }
 
   // ---- Numbers ----
-  const babiesPerSecond = 4.2; // roughly 130 million births a year
   const value: Record<string, () => number> = {
     years: () => new Date().getFullYear() - 2021,
     skills: () => 0, // fixed, read from data-to
-    babies: () => {
-      const d = new Date();
-      const midnight = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-      return Math.floor(((d.getTime() - midnight) / 1000) * babiesPerSecond);
-    },
-    moon: () => Math.floor((Date.now() - Date.UTC(1969, 6, 20, 20, 17, 40)) / 1000),
   };
-  const live: Record<string, number> = { babies: 250, moon: 1000 }; // how often each one ticks (ms)
   const nums = Array.from(document.querySelectorAll<HTMLElement>('.stats b[data-key]'));
   const current = (el: HTMLElement) => (el.dataset.key === 'skills' ? Number(el.dataset.to) : value[el.dataset.key!]());
   const paint = (el: HTMLElement, n: number) => { el.textContent = Math.round(n).toLocaleString('en-US') + (el.dataset.suffix ?? ''); };
@@ -135,17 +130,12 @@ const stats = [
   const start = (el: HTMLElement) => {
     if (started.has(el)) return;
     started.add(el);
-    const tickMs = live[el.dataset.key!];
-    const finish = () => {
-      paint(el, current(el));
-      if (tickMs && !reduce) window.setInterval(() => paint(el, current(el)), tickMs);
-    };
-    if (reduce) { finish(); return; }
+    if (reduce) { paint(el, current(el)); return; }
     const t0 = performance.now();
     const step = (t: number) => {
       const k = Math.min(1, (t - t0) / 1200);
       paint(el, current(el) * (1 - Math.pow(1 - k, 3)));
-      if (k < 1) requestAnimationFrame(step); else finish();
+      if (k < 1) requestAnimationFrame(step); else paint(el, current(el));
     };
     requestAnimationFrame(step);
   };
@@ -163,6 +153,15 @@ const stats = [
     setTimeout(() => nums.forEach(start), 4000);
   } else {
     nums.forEach(start);
+  }
+
+  // ---- Time on the site ----
+  // Starts when someone first opens any page and keeps going as they browse. It ends when the tab closes.
+  const clock = document.getElementById('visit-time');
+  if (clock) {
+    const tick = () => { clock.textContent = elapsedText(); };
+    tick();
+    window.setInterval(tick, 1000);
   }
 
   // ---- Surprise me: jump to a random page worth seeing ----
@@ -189,11 +188,12 @@ const stats = [
   .hello { margin: 0 0 2px; font-size: 1.1rem; }
   h1 {
     margin: 0;
-    background: linear-gradient(90deg, var(--c-work), var(--c-arcade), var(--c-about));
+    /* Dark, with just a hint of blue at the end. */
+    background: linear-gradient(90deg, var(--text), color-mix(in srgb, var(--c-work) 38%, var(--text)));
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .lead { font-size: 1.2rem; color: var(--muted); max-width: 56ch; margin: 0 0 14px; }
-  .fact { margin: 0 0 36px; max-width: 64ch; }
+  .lead { font-size: 1.2rem; color: var(--muted); max-width: 56ch; margin: 0 0 36px; }
+  .fact { margin: 36px 0 0; max-width: 64ch; }
   .fact .label {
     display: block; margin: 0 0 4px; font-size: 0.78rem; font-weight: 800;
     letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-arcade);
@@ -216,8 +216,7 @@ const stats = [
   .door p { margin: 0 0 16px; }
   .go { color: var(--door); font-weight: 700; }
 
-  .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; list-style: none; margin: 40px 0 0; padding: 0; }
-  @media (min-width: 900px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 20px 24px; list-style: none; margin: 40px 0 0; padding: 0; max-width: 760px; }
   .stats li { display: flex; flex-direction: column; }
   .stats b { font-size: clamp(1.2rem, 2.2vw + 0.5rem, 1.55rem); line-height: 1.15; color: var(--stat); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .stats span { font-size: 0.88rem; color: var(--muted); }

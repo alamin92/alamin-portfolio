@@ -19,7 +19,7 @@ npm run preview  # serve the built site
 - `src/data/photos.ts`: photo albums manifest
 - `src/scripts/`: game logic
 - `public/photos/`: web-sized photos (originals stay local in `photos/`, git-ignored)
-- `src/scripts/sound.ts`, `piano.ts`, `animals.ts`: all sound is made in the browser with the Web Audio API (no audio files)
+- `src/scripts/sound.ts`, `piano.ts`, `soundboard.ts`: all sound is made in the browser with the Web Audio API (no audio files)
 - `public/me/`: portraits for the Home and About pages (the About photo flips between a professional shot and trip shots)
 ## Planned
 

@@ -1,29 +1,26 @@
 ---
 import Base from '../../layouts/Base.astro';
 
-const critters = [
-  { id: 'ruby', emoji: '🦜', name: 'Ruby', note: 'My cockatiel, chirping' },
-  { id: 'tiki', emoji: '🐦', name: 'Tiki', note: 'My other cockatiel, whistling' },
+const tiles = [
   { id: 'owl', emoji: '🦉', name: 'Owl', note: 'Hoo, hoo-hoo, hooo' },
-  { id: 'wolf', emoji: '🐺', name: 'Wolf', note: 'A long howl at the moon' },
   { id: 'cricket', emoji: '🦗', name: 'Cricket', note: 'A summer night' },
   { id: 'frog', emoji: '🐸', name: 'Frog', note: 'Ribbit' },
-  { id: 'cat', emoji: '🐱', name: 'Cat', note: 'Meow' },
-  { id: 'dog', emoji: '🐶', name: 'Dog', note: 'Woof woof' },
-  { id: 'deer', emoji: '🦌', name: 'Deer', note: 'A fawn\'s little bleat' },
+  { id: 'drum', emoji: '🥁', name: 'Drum', note: 'A quick beat and a fill' },
+  { id: 'dreamcatcher', emoji: '🪶', name: 'Dreamcatcher', note: 'A soft breeze and tiny bells' },
+  { id: 'thunder', emoji: '⛈️', name: 'Thunder', note: 'A storm rolling in' },
 ];
 ---
 
-<Base title="Critter sounds" description="A sound board of animal sounds, including my two cockatiels, made from scratch with code.">
+<Base title="Sound board" description="A small sound board with an owl, a cricket, a frog, a drum, a dreamcatcher and thunder, all made from scratch with code.">
   <div class="page">
     <div class="container">
       <p><a href="/arcade">← Arcade</a></p>
-      <h1>Critter sounds</h1>
-      <p class="lead">Tap an animal to hear it. Say hi to Ruby and Tiki, my cockatiels.</p>
+      <h1>Sound board</h1>
+      <p class="lead">Tap a tile to hear it: a few night creatures, a drum, a dreamcatcher and a storm.</p>
 
       <div class="grid">
-        {critters.map((c) => (
-          <button type="button" class="card critter nosound" data-animal={c.id} aria-label={`Play ${c.name}: ${c.note}`}>
+        {tiles.map((c) => (
+          <button type="button" class="card tile nosound" data-sound={c.id} aria-label={`Play ${c.name}: ${c.note}`}>
             <span class="emoji" aria-hidden="true">{c.emoji}</span>
             <span class="name">{c.name}</span>
             <span class="note muted">{c.note}</span>
@@ -33,20 +30,20 @@ const critters = [
 
       <p class="muted fine">
         These are not recordings. Every sound is made by a few lines of code, so think of them as
-        cartoon impressions rather than the real thing.
+        cartoon impressions rather than the real thing. Turn your volume down a little first.
       </p>
     </div>
   </div>
 </Base>
 
 <script>
-  import { initCritters } from '../../scripts/animals';
+  import { initSoundBoard } from '../../scripts/soundboard';
 
-  initCritters(Array.from(document.querySelectorAll<HTMLElement>('.critter')));
+  initSoundBoard(Array.from(document.querySelectorAll<HTMLElement>('.tile')));
 </script>
 
 <style>
-  .critter {
+  .tile {
     display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;
     font: inherit; color: var(--text); cursor: pointer; padding: 22px 12px;
   }
