@@ -1,18 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../config';
-import { albums } from '../data/photos';
-import { placeCategories } from '../data/places';
+import { skills } from '../data/skills';
+import { facts } from '../data/facts';
 
-// Counted from the data files, so these never go stale.
-const placeCount = placeCategories.reduce((n, c) => n + c.items.length, 0);
-const photoCount = albums.reduce((n, a) => n + a.photos.length, 0);
-const gameCount = 4; // Snake, Memory Match, 2048, Sky Fighter
+// The numbers below are worked out from data or from the clock, so they never need editing.
+const START_YEAR = 2021; // first software job
+const skillCount = new Set(skills.flatMap((g) => g.items)).size;
 
 const stats = [
-  { n: placeCount, label: 'places on my travel map', color: 'var(--c-travel)' },
-  { n: photoCount, label: 'photos from my trips', color: 'var(--c-about)' },
-  { n: gameCount, label: 'games to play', color: 'var(--c-arcade)' },
+  { key: 'years', n: new Date().getFullYear() - START_YEAR, suffix: '', label: 'years in software, and counting', color: 'var(--c-about)' },
+  { key: 'skills', n: Math.floor(skillCount / 10) * 10, suffix: '+', label: 'tools and skills', color: 'var(--c-work)' },
+  { key: 'babies', n: Math.floor(((Date.now() % 86400000) / 1000) * 4.2), suffix: '', label: 'babies born on Earth so far today (estimate)', color: 'var(--c-arcade)' },
+  { key: 'moon', n: Math.floor((Date.now() - Date.UTC(1969, 6, 20, 20, 17, 40)) / 1000), suffix: '', label: 'seconds since people first walked on the Moon', color: 'var(--c-travel)' },
 ];
 ---
 
@@ -27,9 +27,11 @@ const stats = [
         </div>
       </div>
       <p class="lead">{site.tagline}</p>
-      <p class="typed" aria-hidden="true">
-        I love <strong id="typed">hiking, photos, games and giving back</strong><span class="caret"></span>
-      </p>
+      <div class="fact">
+        <span class="label">Did you know?</span>
+        <span class="text"><span id="fact">{facts[0]}</span><span class="caret" aria-hidden="true"></span></span>
+        <button type="button" class="again" id="fact-next">Another fact →</button>
+      </div>
 
       <div class="doors">
         <a class="door card" href="/about" style="--door: var(--c-about)">
@@ -53,10 +55,10 @@ const stats = [
       </div>
 
       <ul class="stats">
-        {stats.map((s) => (
-          <li style={`--stat: ${s.color}`}>
-            <b data-to={s.n}>{s.n}</b>
-            <span>{s.label}</span>
+        {stats.map((x) => (
+          <li style={`--stat: ${x.color}`}>
+            <b data-key={x.key} data-to={x.n} data-suffix={x.suffix}>{x.n.toLocaleString('en-US')}{x.suffix}</b>
+            <span>{x.label}</span>
           </li>
         ))}
       </ul>
@@ -69,50 +71,101 @@ const stats = [
 </Base>
 
 <script>
+  import { facts } from '../data/facts';
+
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Typed line: the full text is in the HTML, so it still reads fine without JavaScript.
-  const typed = document.getElementById('typed');
-  if (typed && !reduce) {
-    const phrases = ['hiking new trails', 'taking photos', 'playing games', 'giving back to my community', 'organizing everything', 'learning something new'];
-    let p = 0, i = 0, deleting = false;
-    const tick = () => {
-      const word = phrases[p];
-      i += deleting ? -1 : 1;
-      typed.textContent = word.slice(0, i);
-      let wait = deleting ? 35 : 70;
-      if (!deleting && i === word.length) { deleting = true; wait = 1400; }
-      else if (deleting && i === 0) { deleting = false; p = (p + 1) % phrases.length; wait = 350; }
-      setTimeout(tick, wait);
+  // ---- Did you know? ----
+  // The first fact is in the HTML, so the page reads fine without JavaScript. After that the
+  // facts are shuffled, typed out one by one, and none repeats until all have been shown.
+  const factEl = document.getElementById('fact');
+  const nextBtn = document.getElementById('fact-next');
+  if (factEl && nextBtn) {
+    const shuffle = (a: number[]) => {
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     };
-    typed.textContent = '';
-    setTimeout(tick, 400);
+    const all = facts.map((_, i) => i);
+    let queue = shuffle(all.filter((i) => i !== 0));
+    let timer = 0;
+
+    const take = () => {
+      if (queue.length === 0) queue = shuffle([...all]);
+      return queue.shift() as number;
+    };
+    const show = (i: number) => {
+      clearTimeout(timer);
+      const text = facts[i];
+      if (reduce) { factEl.textContent = text; return; }
+      let n = 0;
+      const type = () => {
+        n++;
+        factEl.textContent = text.slice(0, n);
+        if (n < text.length) timer = window.setTimeout(type, 20);
+        else timer = window.setTimeout(() => show(take()), 3000 + text.length * 28);
+      };
+      factEl.textContent = '';
+      type();
+    };
+    nextBtn.addEventListener('click', () => show(take()));
+    if (!reduce) timer = window.setTimeout(() => show(take()), 5500);
   }
 
-  // Count-up numbers when they scroll into view.
-  const nums = document.querySelectorAll<HTMLElement>('.stats b[data-to]');
-  if (!reduce && 'IntersectionObserver' in window) {
+  // ---- Numbers ----
+  const babiesPerSecond = 4.2; // roughly 130 million births a year
+  const value: Record<string, () => number> = {
+    years: () => new Date().getFullYear() - 2021,
+    skills: () => 0, // fixed, read from data-to
+    babies: () => {
+      const d = new Date();
+      const midnight = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+      return Math.floor(((d.getTime() - midnight) / 1000) * babiesPerSecond);
+    },
+    moon: () => Math.floor((Date.now() - Date.UTC(1969, 6, 20, 20, 17, 40)) / 1000),
+  };
+  const live: Record<string, number> = { babies: 250, moon: 1000 }; // how often each one ticks (ms)
+  const nums = Array.from(document.querySelectorAll<HTMLElement>('.stats b[data-key]'));
+  const current = (el: HTMLElement) => (el.dataset.key === 'skills' ? Number(el.dataset.to) : value[el.dataset.key!]());
+  const paint = (el: HTMLElement, n: number) => { el.textContent = Math.round(n).toLocaleString('en-US') + (el.dataset.suffix ?? ''); };
+  const started = new Set<HTMLElement>();
+
+  const start = (el: HTMLElement) => {
+    if (started.has(el)) return;
+    started.add(el);
+    const tickMs = live[el.dataset.key!];
+    const finish = () => {
+      paint(el, current(el));
+      if (tickMs && !reduce) window.setInterval(() => paint(el, current(el)), tickMs);
+    };
+    if (reduce) { finish(); return; }
+    const t0 = performance.now();
+    const step = (t: number) => {
+      const k = Math.min(1, (t - t0) / 1200);
+      paint(el, current(el) * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(step); else finish();
+    };
+    requestAnimationFrame(step);
+  };
+
+  if ('IntersectionObserver' in window && !reduce) {
     const io = new IntersectionObserver((entries) => {
       for (const e of entries) {
         if (!e.isIntersecting) continue;
         io.unobserve(e.target);
-        const el = e.target as HTMLElement;
-        const to = Number(el.dataset.to);
-        const t0 = performance.now();
-        const step = (t: number) => {
-          const k = Math.min(1, (t - t0) / 1000);
-          el.textContent = String(Math.round(to * (1 - Math.pow(1 - k, 3))));
-          if (k < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
+        start(e.target as HTMLElement);
       }
     });
-    nums.forEach((n) => { n.textContent = '0'; io.observe(n); });
+    nums.forEach((n) => { paint(n, 0); io.observe(n); });
     // Safety net: never leave a number stuck at 0.
-    setTimeout(() => nums.forEach((n) => { if (n.textContent === '0') n.textContent = n.dataset.to ?? ''; }), 4000);
+    setTimeout(() => nums.forEach(start), 4000);
+  } else {
+    nums.forEach(start);
   }
 
-  // Surprise me: jump to a random page worth seeing.
+  // ---- Surprise me: jump to a random page worth seeing ----
   const spots = ['/arcade/snake', '/arcade/memory', '/arcade/2048', '/arcade/skyfighter', '/travel/photos', '/travel/places', '/about', '/projects', '/community'];
   document.getElementById('surprise')?.addEventListener('click', () => {
     location.href = spots[Math.floor(Math.random() * spots.length)];
@@ -140,10 +193,20 @@ const stats = [
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .lead { font-size: 1.2rem; color: var(--muted); max-width: 56ch; margin: 0 0 14px; }
-  .typed { margin: 0 0 36px; font-size: 1.1rem; min-height: 1.7em; }
-  .typed strong { color: var(--c-arcade); }
+  .fact { margin: 0 0 36px; max-width: 64ch; }
+  .fact .label {
+    display: block; margin: 0 0 4px; font-size: 0.78rem; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-arcade);
+  }
+  .fact .text { display: block; font-size: 1.1rem; min-height: 3.3em; }
   .caret { display: inline-block; width: 2px; height: 1.05em; margin-left: 2px; vertical-align: -2px; background: var(--c-arcade); animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
+  .again {
+    margin: 2px 0 0; padding: 0; border: 0; background: none; cursor: pointer;
+    font: inherit; font-size: 0.9rem; font-weight: 700; color: var(--c-arcade);
+  }
+  .again:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .fact .text { min-height: 5em; } }
 
   .doors { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
   .door { --area: var(--door); color: var(--text); border-top: 4px solid var(--door); }
@@ -153,10 +216,11 @@ const stats = [
   .door p { margin: 0 0 16px; }
   .go { color: var(--door); font-weight: 700; }
 
-  .stats { display: flex; flex-wrap: wrap; gap: 12px 40px; list-style: none; margin: 40px 0 0; padding: 0; }
+  .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; list-style: none; margin: 40px 0 0; padding: 0; }
+  @media (min-width: 900px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   .stats li { display: flex; flex-direction: column; }
-  .stats b { font-size: 2rem; line-height: 1.1; color: var(--stat); font-variant-numeric: tabular-nums; }
-  .stats span { font-size: 0.9rem; color: var(--muted); }
+  .stats b { font-size: clamp(1.2rem, 2.2vw + 0.5rem, 1.55rem); line-height: 1.15; color: var(--stat); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .stats span { font-size: 0.88rem; color: var(--muted); }
 
   .surprise { margin: 32px 0 0; }
   @media (max-width: 480px) {
