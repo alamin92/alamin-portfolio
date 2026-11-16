@@ -16,7 +16,8 @@
   --c-work: #2563eb;
   --c-contact: #7c3aed;
   --area: var(--accent);
-  --band-mix: 6%;
+  --page-mix: 3%;
+  --band-mix: 8%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,7 +34,8 @@
     --c-travel: #4ade80;
     --c-work: #60a5fa;
     --c-contact: #a78bfa;
-    --band-mix: 10%;
+    --page-mix: 5%;
+    --band-mix: 11%;
   }
 }
 
@@ -50,7 +52,11 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  /* Very light tint of the section color, plus a soft glow at the top of the page. */
+  --page-bg: color-mix(in srgb, var(--area) var(--page-mix), var(--bg));
+  background-color: var(--page-bg);
+  background-image: radial-gradient(900px 340px at 50% -90px, color-mix(in srgb, var(--area) 11%, transparent), transparent);
+  background-repeat: no-repeat;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.6;
