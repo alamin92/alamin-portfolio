@@ -17,6 +17,7 @@ const p = Astro.url.pathname;
 const area = p.startsWith('/arcade') ? 'arcade'
   : p.startsWith('/travel') || p === '/gallery' ? 'travel'
   : p.startsWith('/about') || p.startsWith('/community') ? 'about'
+  : p.startsWith('/contact') ? 'contact'
   : 'work';
 ---
 

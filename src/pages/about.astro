@@ -389,7 +389,7 @@ const rules = [
   .spy a[aria-current='true'] { color: var(--text); background: color-mix(in srgb, var(--area) 22%, transparent); }
 
   .band { padding: 48px 0 52px; scroll-margin-top: 56px; }
-  .band:nth-of-type(even) { background: color-mix(in srgb, var(--area) 6%, var(--bg)); }
+  .band:nth-of-type(even) { background: color-mix(in srgb, var(--area) var(--band-mix), var(--bg)); }
   .band h2:first-child { margin-top: 0; }
   .grid.two { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
   @media (max-width: 420px) { .grid.two { grid-template-columns: 1fr; } }

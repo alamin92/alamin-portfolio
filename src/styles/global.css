@@ -14,7 +14,9 @@
   --c-arcade: #be185d;
   --c-travel: #15803d;
   --c-work: #2563eb;
+  --c-contact: #7c3aed;
   --area: var(--accent);
+  --band-mix: 6%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,6 +32,8 @@
     --c-arcade: #f472b6;
     --c-travel: #4ade80;
     --c-work: #60a5fa;
+    --c-contact: #a78bfa;
+    --band-mix: 10%;
   }
 }
 
@@ -38,6 +42,7 @@ body[data-area='about'] { --area: var(--c-about); }
 body[data-area='arcade'] { --area: var(--c-arcade); }
 body[data-area='travel'] { --area: var(--c-travel); }
 body[data-area='work'] { --area: var(--c-work); }
+body[data-area='contact'] { --area: var(--c-contact); }
 
 * { box-sizing: border-box; }
 
@@ -88,8 +93,8 @@ h3 { font-size: 1.1rem; margin: 0 0 6px; }
   font-size: 0.95rem;
 }
 .btn:hover { text-decoration: none; border-color: var(--area); }
-.btn.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-.btn.primary:hover { border-color: var(--accent); filter: brightness(1.1); }
+.btn.primary { background: var(--area); color: var(--accent-text); border-color: var(--area); }
+.btn.primary:hover { border-color: var(--area); filter: brightness(1.1); }
 
 .card {
   background: var(--surface);
