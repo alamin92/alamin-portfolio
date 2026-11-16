@@ -27,7 +27,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 </header>
 
 <script>
-  import { audio, soundOn, setSound, ui } from '../scripts/sound';
+  import { audio, soundOn, setSound } from '../scripts/sound';
   import { visitStart } from '../scripts/visit';
 
   visitStart(); // starts the "time on site" clock on whichever page someone lands on first
@@ -46,17 +46,14 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     const on = !soundOn();
     setSound(on);
     paint();
-    if (on) { audio(); ui.hello(); }
+    if (on) audio(); // lets the browser start audio; the switch itself makes no sound
   });
 
-  // A soft tick on clicks and taps anywhere, when the switch is on. The piano keys and animal
-  // buttons make their own sound, so they are skipped here.
-  document.addEventListener('pointerdown', (e) => {
-    if (!soundOn()) return;
-    const t = e.target as Element | null;
-    if (!t || t.closest('#sound-toggle, .nosound')) return;
-    if (t.closest('a[href], button, summary, .card')) { audio(); ui.click(); }
-  });
+  // Browsers only start audio after a click, tap or key press. When the switch is on, quietly get
+  // ready on the first one so the photo flip can make its soft sound. This plays nothing itself.
+  const unlock = () => { if (soundOn()) audio(); };
+  document.addEventListener('pointerdown', unlock, { passive: true });
+  document.addEventListener('keydown', unlock, { passive: true });
 </script>
 
 <style>

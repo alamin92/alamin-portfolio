@@ -4,17 +4,17 @@
   --text: #1c1917;
   --muted: #6b6560;
   --border: #e7e5e4;
-  --accent: #2563eb;
+  --accent: #335aa3;
   --accent-text: #ffffff;
   --radius: 12px;
   --max: 920px;
 
   /* One color per area of the site. Used for accents, never for body text on small sizes. */
-  --c-about: #b45309;
-  --c-arcade: #be185d;
-  --c-travel: #15803d;
-  --c-work: #2563eb;
-  --c-contact: #7c3aed;
+  --c-about: #865a19;
+  --c-arcade: #973559;
+  --c-travel: #296b48;
+  --c-work: #335aa3;
+  --c-contact: #67479e;
   --area: var(--accent);
   --page-mix: 3%;
   --band-mix: 8%;
@@ -27,13 +27,13 @@
     --text: #f5f5f4;
     --muted: #a8a29e;
     --border: #2a2a2e;
-    --accent: #60a5fa;
+    --accent: #7396d3;
     --accent-text: #0b1220;
-    --c-about: #fbbf24;
-    --c-arcade: #f472b6;
-    --c-travel: #4ade80;
-    --c-work: #60a5fa;
-    --c-contact: #a78bfa;
+    --c-about: #c9a254;
+    --c-arcade: #c77591;
+    --c-travel: #5dac85;
+    --c-work: #7396d3;
+    --c-contact: #aa94d1;
     --page-mix: 5%;
     --band-mix: 11%;
   }

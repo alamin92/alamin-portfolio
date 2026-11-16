@@ -44,7 +44,7 @@ const keys = notes.map((n) => {
         {keys.map((k) => (
           <button
             type="button"
-            class={`key nosound ${k.black ? 'black' : 'white'}`}
+            class={`key ${k.black ? 'black' : 'white'}`}
             data-note={k.note}
             data-f={k.f}
             data-kb={k.kb}
@@ -64,9 +64,9 @@ const keys = notes.map((n) => {
 
       <div class="songs">
         <span class="muted">Let it play:</span>
-        <button type="button" class="btn nosound" data-song="twinkle">Twinkle Twinkle</button>
-        <button type="button" class="btn nosound" data-song="ode">Ode to Joy</button>
-        <button type="button" class="btn nosound" id="stop">Stop</button>
+        <button type="button" class="btn" data-song="twinkle">Twinkle Twinkle</button>
+        <button type="button" class="btn" data-song="ode">Ode to Joy</button>
+        <button type="button" class="btn" id="stop">Stop</button>
       </div>
     </div>
   </div>

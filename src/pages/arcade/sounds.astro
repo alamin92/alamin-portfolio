@@ -20,7 +20,7 @@ const tiles = [
 
       <div class="grid">
         {tiles.map((c) => (
-          <button type="button" class="card tile nosound" data-sound={c.id} aria-label={`Play ${c.name}: ${c.note}`}>
+          <button type="button" class="card tile" data-sound={c.id} aria-label={`Play ${c.name}: ${c.note}`}>
             <span class="emoji" aria-hidden="true">{c.emoji}</span>
             <span class="name">{c.name}</span>
             <span class="note muted">{c.note}</span>

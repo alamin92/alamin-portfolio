@@ -139,25 +139,13 @@ export function whoosh(dur: number, from: number, to: number, vol = 0.08, delay 
   src.stop(t0 + dur + 0.05);
 }
 
-// ---- Soft interface sounds. They only play when the header switch is on. ----
+// ---- Interface sound ----
+// Just one, very quiet: a soft breath of air when the About photo flips. It only plays when the
+// header switch is on. There are no click or ping sounds.
 
-let lastClick = 0;
 export const ui = {
-  click() {
-    if (!soundOn()) return;
-    const t = performance.now();
-    if (t - lastClick < 60) return;
-    lastClick = t;
-    tone({ freq: 520, freq2: 760, dur: 0.09, type: 'triangle', vol: 0.12 });
-  },
   flip() {
     if (!soundOn()) return;
-    whoosh(0.28, 500, 2600, 0.07);
-    tone({ freq: 880, freq2: 1320, dur: 0.12, type: 'sine', vol: 0.03, delay: 0.1 });
-  },
-  /** Plays when the switch is turned on, so you can hear that it works. */
-  hello() {
-    tone({ freq: 523, dur: 0.12, type: 'triangle', vol: 0.08 });
-    tone({ freq: 784, dur: 0.18, type: 'triangle', vol: 0.08, delay: 0.1 });
+    whoosh(0.3, 500, 2400, 0.09);
   },
 };
