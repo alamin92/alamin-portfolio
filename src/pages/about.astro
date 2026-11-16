@@ -278,6 +278,8 @@ const rules = [
 </Base>
 
 <script>
+  import { ui } from '../scripts/sound';
+
   // Flip card: hover on a mouse, tap or Enter elsewhere. Each time it flips to the back it
   // shows a different fun photo.
   const flip = document.getElementById('flip') as HTMLButtonElement | null;
@@ -292,8 +294,9 @@ const rules = [
       n = (n + 1) % COUNT;
       new Image().src = `/me/fun-${n + 1}.jpg`; // preload the next one
       flip.classList.add('flipped');
+      ui.flip();
     };
-    const showFront = () => flip.classList.remove('flipped');
+    const showFront = () => { flip.classList.remove('flipped'); ui.flip(); };
     flip.addEventListener('pointerenter', (e) => { lastType = e.pointerType; if (e.pointerType === 'mouse') showBack(); });
     flip.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') showFront(); });
     flip.addEventListener('click', (e) => {

@@ -166,7 +166,7 @@ const stats = [
   }
 
   // ---- Surprise me: jump to a random page worth seeing ----
-  const spots = ['/arcade/snake', '/arcade/memory', '/arcade/2048', '/arcade/skyfighter', '/travel/photos', '/travel/places', '/about', '/projects', '/community'];
+  const spots = ['/arcade/snake', '/arcade/memory', '/arcade/2048', '/arcade/skyfighter', '/arcade/piano', '/arcade/sounds', '/travel/photos', '/travel/places', '/about', '/projects', '/community'];
   document.getElementById('surprise')?.addEventListener('click', () => {
     location.href = spots[Math.floor(Math.random() * spots.length)];
   });

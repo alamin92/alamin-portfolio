@@ -1,0 +1,114 @@
+---
+import Base from '../../layouts/Base.astro';
+
+// One and a half octaves, C4 to E5. "kb" is the computer key that plays it.
+const notes = [
+  { note: 'C4', f: 261.63, kb: 'a' },
+  { note: 'C#4', f: 277.18, kb: 'w' },
+  { note: 'D4', f: 293.66, kb: 's' },
+  { note: 'D#4', f: 311.13, kb: 'e' },
+  { note: 'E4', f: 329.63, kb: 'd' },
+  { note: 'F4', f: 349.23, kb: 'f' },
+  { note: 'F#4', f: 369.99, kb: 't' },
+  { note: 'G4', f: 392.0, kb: 'g' },
+  { note: 'G#4', f: 415.3, kb: 'y' },
+  { note: 'A4', f: 440.0, kb: 'h' },
+  { note: 'A#4', f: 466.16, kb: 'u' },
+  { note: 'B4', f: 493.88, kb: 'j' },
+  { note: 'C5', f: 523.25, kb: 'k' },
+  { note: 'C#5', f: 554.37, kb: 'o' },
+  { note: 'D5', f: 587.33, kb: 'l' },
+  { note: 'D#5', f: 622.25, kb: 'p' },
+  { note: 'E5', f: 659.25, kb: ';' },
+];
+
+// Black keys sit on the line between two white keys.
+const whites = notes.filter((n) => !n.note.includes('#'));
+let seen = -1;
+const keys = notes.map((n) => {
+  if (!n.note.includes('#')) { seen++; return { ...n, black: false, left: 0 }; }
+  return { ...n, black: true, left: (seen + 1) / whites.length };
+});
+---
+
+<Base title="Piano" description="A small piano you can play with the mouse, touch or computer keyboard, built from scratch.">
+  <div class="page">
+    <div class="container">
+      <p><a href="/arcade">← Arcade</a></p>
+      <h1>Piano</h1>
+      <p class="lead">
+        Tap or click the keys, or slide across them. On a computer you can play with the keyboard too.
+      </p>
+
+      <div id="piano" class="piano" role="group" aria-label="Piano keyboard">
+        {keys.map((k) => (
+          <button
+            type="button"
+            class={`key nosound ${k.black ? 'black' : 'white'}`}
+            data-note={k.note}
+            data-f={k.f}
+            data-kb={k.kb}
+            style={k.black ? `--p: ${k.left}` : undefined}
+            aria-label={`${k.note.replace('#', ' sharp ')}`}
+          >
+            <span class="kb">{k.kb.toUpperCase()}</span>
+            {!k.black && <span class="name">{k.note.replace(/\d/, '')}</span>}
+          </button>
+        ))}
+      </div>
+
+      <p class="muted hint">
+        Computer keys: <strong>A S D F G H J K L ;</strong> are the white keys, and
+        <strong>W E T Y U O P</strong> are the black ones.
+      </p>
+
+      <div class="songs">
+        <span class="muted">Let it play:</span>
+        <button type="button" class="btn nosound" data-song="twinkle">Twinkle Twinkle</button>
+        <button type="button" class="btn nosound" data-song="ode">Ode to Joy</button>
+        <button type="button" class="btn nosound" id="stop">Stop</button>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  import { initPiano } from '../../scripts/piano';
+
+  initPiano(document.getElementById('piano')!, {
+    stop: document.getElementById('stop')!,
+    songButtons: Array.from(document.querySelectorAll<HTMLElement>('[data-song]')),
+  });
+</script>
+
+<style>
+  .piano {
+    --pad: 10px;
+    position: relative; display: flex; height: 230px; margin: 28px 0 0; padding: var(--pad) var(--pad) 0;
+    background: #1b1b20; border-radius: 14px 14px 8px 8px; touch-action: none; user-select: none; -webkit-user-select: none;
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--area) 22%, transparent);
+  }
+  .key { font: inherit; cursor: pointer; padding: 0; border: 0; touch-action: none; -webkit-tap-highlight-color: transparent; }
+  .white {
+    flex: 1; position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+    padding: 10px 0 12px; color: #4b4b52; background: #fdfdfc; border: 1px solid #bdbdc2;
+    border-radius: 0 0 8px 8px; transition: background 0.06s;
+  }
+  .white .kb { font-size: 0.7rem; font-weight: 700; color: #9a9aa2; }
+  .white .name { font-size: 0.8rem; font-weight: 700; }
+  .black {
+    position: absolute; top: var(--pad); width: calc((100% - 2 * var(--pad)) * 0.064); left: calc(var(--pad) + (100% - 2 * var(--pad)) * (var(--p) - 0.032)); height: 58%; z-index: 2; display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 8px; color: #b9b9c0; font-size: 0.65rem; font-weight: 700; background: linear-gradient(#2a2a30, #111114);
+    border-radius: 0 0 6px 6px; box-shadow: 0 3px 4px rgba(0, 0, 0, 0.5); transition: background 0.06s;
+  }
+  .white.down { background: color-mix(in srgb, var(--area) 38%, #fff); }
+  .black.down { background: var(--area); color: #fff; }
+  .key:focus-visible { outline: 3px solid var(--area); outline-offset: -3px; }
+
+  .hint { margin: 16px 0 0; font-size: 0.9rem; }
+  .songs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin: 18px 0 0; }
+  @media (max-width: 560px) {
+    .piano { height: 190px; --pad: 6px; }
+    .white .kb { display: none; }
+  }
+</style>

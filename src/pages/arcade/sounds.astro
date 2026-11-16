@@ -1,0 +1,63 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const critters = [
+  { id: 'ruby', emoji: '🦜', name: 'Ruby', note: 'My cockatiel, chirping' },
+  { id: 'tiki', emoji: '🐦', name: 'Tiki', note: 'My other cockatiel, whistling' },
+  { id: 'owl', emoji: '🦉', name: 'Owl', note: 'Hoo, hoo-hoo, hooo' },
+  { id: 'wolf', emoji: '🐺', name: 'Wolf', note: 'A long howl at the moon' },
+  { id: 'cricket', emoji: '🦗', name: 'Cricket', note: 'A summer night' },
+  { id: 'frog', emoji: '🐸', name: 'Frog', note: 'Ribbit' },
+  { id: 'cat', emoji: '🐱', name: 'Cat', note: 'Meow' },
+  { id: 'dog', emoji: '🐶', name: 'Dog', note: 'Woof woof' },
+  { id: 'deer', emoji: '🦌', name: 'Deer', note: 'A fawn\'s little bleat' },
+];
+---
+
+<Base title="Critter sounds" description="A sound board of animal sounds, including my two cockatiels, made from scratch with code.">
+  <div class="page">
+    <div class="container">
+      <p><a href="/arcade">← Arcade</a></p>
+      <h1>Critter sounds</h1>
+      <p class="lead">Tap an animal to hear it. Say hi to Ruby and Tiki, my cockatiels.</p>
+
+      <div class="grid">
+        {critters.map((c) => (
+          <button type="button" class="card critter nosound" data-animal={c.id} aria-label={`Play ${c.name}: ${c.note}`}>
+            <span class="emoji" aria-hidden="true">{c.emoji}</span>
+            <span class="name">{c.name}</span>
+            <span class="note muted">{c.note}</span>
+          </button>
+        ))}
+      </div>
+
+      <p class="muted fine">
+        These are not recordings. Every sound is made by a few lines of code, so think of them as
+        cartoon impressions rather than the real thing.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<script>
+  import { initCritters } from '../../scripts/animals';
+
+  initCritters(Array.from(document.querySelectorAll<HTMLElement>('.critter')));
+</script>
+
+<style>
+  .critter {
+    display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px;
+    font: inherit; color: var(--text); cursor: pointer; padding: 22px 12px;
+  }
+  .emoji { font-size: 2.6rem; line-height: 1; }
+  .name { font-weight: 700; font-size: 1.05rem; }
+  .note { font-size: 0.85rem; }
+  .playing .emoji { animation: bounce 0.6s ease; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    30% { transform: translateY(-10px) scale(1.15); }
+    60% { transform: translateY(0) scale(0.95); }
+  }
+  .fine { margin: 24px 0 0; font-size: 0.9rem; }
+</style>

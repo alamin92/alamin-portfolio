@@ -6,14 +6,16 @@ const games = [
   { name: 'Memory Match', href: '/arcade/memory', blurb: 'Find the matching pairs. The cards are photos from my trips.', how: 'Click or tap' },
   { name: '2048', href: '/arcade/2048', blurb: 'Slide and merge tiles. How high can you get?', how: 'Arrow keys, WASD or swipe' },
   { name: 'Sky Fighter', href: '/arcade/skyfighter', blurb: 'Fly a plane, shoot everything that falls, and survive as long as you can.', how: 'Arrow keys, WASD or drag' },
+  { name: 'Piano', href: '/arcade/piano', blurb: 'Play a tune, slide across the keys, or let it play one for you.', how: 'Click, tap or use your keyboard' },
+  { name: 'Critter Sounds', href: '/arcade/sounds', blurb: 'Tap an animal to hear it, including my two cockatiels, Ruby and Tiki.', how: 'Click or tap' },
 ];
 ---
 
-<Base title="Arcade" description="Four browser games built from scratch: Snake, Memory Match, 2048 and Sky Fighter.">
+<Base title="Arcade" description="Browser games, a piano and a sound board of animal sounds, all built from scratch: Snake, Memory Match, 2048, Sky Fighter and more.">
   <div class="page">
     <div class="container">
       <h1>Arcade</h1>
-      <p class="lead">Old-school games, built from scratch. Keyboard, mouse or touch.</p>
+      <p class="lead">Games, a piano and some animal sounds, all built from scratch. Keyboard, mouse or touch.</p>
 
       <div class="grid">
         {games.map((g) => (
