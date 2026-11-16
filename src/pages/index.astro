@@ -1,45 +1,165 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../config';
+import { albums } from '../data/photos';
+import { placeCategories } from '../data/places';
+
+// Counted from the data files, so these never go stale.
+const placeCount = placeCategories.reduce((n, c) => n + c.items.length, 0);
+const photoCount = albums.reduce((n, a) => n + a.photos.length, 0);
+const gameCount = 4; // Snake, Memory Match, 2048, Sky Fighter
+
+const stats = [
+  { n: placeCount, label: 'places on my travel map', color: 'var(--c-travel)' },
+  { n: photoCount, label: 'photos from my trips', color: 'var(--c-about)' },
+  { n: gameCount, label: 'games to play', color: 'var(--c-arcade)' },
+];
 ---
 
 <Base>
   <section class="hero">
     <div class="container">
-      <p class="muted hello">Hi, I'm</p>
-      <h1>{site.name}</h1>
+      <div class="who">
+        <img class="me" src="/me/home.jpg" width="96" height="96" alt="Alamin Hossain" />
+        <div>
+          <p class="muted hello">Hi, I'm</p>
+          <h1>{site.name}</h1>
+        </div>
+      </div>
       <p class="lead">{site.tagline}</p>
+      <p class="typed" aria-hidden="true">
+        I love <strong id="typed">hiking, photos, games and giving back</strong><span class="caret"></span>
+      </p>
 
       <div class="doors">
-        <a class="door card" href="/about">
+        <a class="door card" href="/about" style="--door: var(--c-about)">
+          <span class="emoji" aria-hidden="true">👋</span>
           <h2>About</h2>
           <p class="muted">Who I am, how I got here, my skills and what I'm like.</p>
           <span class="go">Read my story →</span>
         </a>
-        <a class="door card" href="/arcade">
+        <a class="door card" href="/arcade" style="--door: var(--c-arcade)">
+          <span class="emoji" aria-hidden="true">🎮</span>
           <h2>Hang Out</h2>
           <p class="muted">Play a game, see where I like to travel, see what I'm into.</p>
           <span class="go">Let's play →</span>
         </a>
-        <a class="door card" href="/projects">
+        <a class="door card" href="/projects" style="--door: var(--c-work)">
+          <span class="emoji" aria-hidden="true">🛠️</span>
           <h2>My Work</h2>
           <p class="muted">My projects, my GitHub and how to get in touch.</p>
           <span class="go">Explore →</span>
         </a>
       </div>
+
+      <ul class="stats">
+        {stats.map((s) => (
+          <li style={`--stat: ${s.color}`}>
+            <b data-to={s.n}>{s.n}</b>
+            <span>{s.label}</span>
+          </li>
+        ))}
+      </ul>
+
+      <p class="surprise">
+        <button type="button" class="btn" id="surprise">Surprise me ✨</button>
+      </p>
     </div>
   </section>
 </Base>
 
-<style>
-  .hero { padding: 72px 0 80px; }
-  .hello { margin: 0 0 4px; font-size: 1.1rem; }
-  .lead { font-size: 1.2rem; color: var(--muted); max-width: 56ch; margin: 0 0 40px; }
-  .doors { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-  .door { color: var(--text); transition: border-color 0.15s, transform 0.15s; }
-  .door:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }
-  .door h2 { margin: 0 0 6px; font-size: 1.4rem; }
-  .door p { margin: 0 0 16px; }
-  .go { color: var(--accent); font-weight: 600; }
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Typed line: the full text is in the HTML, so it still reads fine without JavaScript.
+  const typed = document.getElementById('typed');
+  if (typed && !reduce) {
+    const phrases = ['hiking new trails', 'taking photos', 'playing games', 'giving back to my community', 'organizing everything', 'learning something new'];
+    let p = 0, i = 0, deleting = false;
+    const tick = () => {
+      const word = phrases[p];
+      i += deleting ? -1 : 1;
+      typed.textContent = word.slice(0, i);
+      let wait = deleting ? 35 : 70;
+      if (!deleting && i === word.length) { deleting = true; wait = 1400; }
+      else if (deleting && i === 0) { deleting = false; p = (p + 1) % phrases.length; wait = 350; }
+      setTimeout(tick, wait);
+    };
+    typed.textContent = '';
+    setTimeout(tick, 400);
+  }
+
+  // Count-up numbers when they scroll into view.
+  const nums = document.querySelectorAll<HTMLElement>('.stats b[data-to]');
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        io.unobserve(e.target);
+        const el = e.target as HTMLElement;
+        const to = Number(el.dataset.to);
+        const t0 = performance.now();
+        const step = (t: number) => {
+          const k = Math.min(1, (t - t0) / 1000);
+          el.textContent = String(Math.round(to * (1 - Math.pow(1 - k, 3))));
+          if (k < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+    });
+    nums.forEach((n) => { n.textContent = '0'; io.observe(n); });
+    // Safety net: never leave a number stuck at 0.
+    setTimeout(() => nums.forEach((n) => { if (n.textContent === '0') n.textContent = n.dataset.to ?? ''; }), 4000);
+  }
+
+  // Surprise me: jump to a random page worth seeing.
+  const spots = ['/arcade/snake', '/arcade/memory', '/arcade/2048', '/arcade/skyfighter', '/travel/photos', '/travel/places', '/about', '/projects', '/community'];
+  document.getElementById('surprise')?.addEventListener('click', () => {
+    location.href = spots[Math.floor(Math.random() * spots.length)];
+  });
+</script>
+
+<style>
+  .hero {
+    padding: 56px 0 72px;
+    background:
+      radial-gradient(640px 300px at 12% 0%, color-mix(in srgb, var(--c-work) 15%, transparent), transparent),
+      radial-gradient(520px 280px at 92% 8%, color-mix(in srgb, var(--c-arcade) 13%, transparent), transparent),
+      radial-gradient(520px 260px at 55% 0%, color-mix(in srgb, var(--c-about) 10%, transparent), transparent);
+  }
+  .who { display: flex; align-items: center; gap: 18px; margin: 0 0 16px; }
+  .me {
+    width: 96px; height: 96px; border-radius: 50%; object-fit: cover; object-position: center 30%;
+    border: 3px solid var(--surface); box-shadow: 0 0 0 3px var(--c-work), 0 8px 20px rgba(0, 0, 0, 0.18);
+    flex: none;
+  }
+  .hello { margin: 0 0 2px; font-size: 1.1rem; }
+  h1 {
+    margin: 0;
+    background: linear-gradient(90deg, var(--c-work), var(--c-arcade), var(--c-about));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lead { font-size: 1.2rem; color: var(--muted); max-width: 56ch; margin: 0 0 14px; }
+  .typed { margin: 0 0 36px; font-size: 1.1rem; min-height: 1.7em; }
+  .typed strong { color: var(--c-arcade); }
+  .caret { display: inline-block; width: 2px; height: 1.05em; margin-left: 2px; vertical-align: -2px; background: var(--c-arcade); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .doors { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .door { --area: var(--door); color: var(--text); border-top: 4px solid var(--door); }
+  .door:hover { text-decoration: none; }
+  .emoji { display: block; font-size: 1.6rem; line-height: 1; margin: 0 0 8px; }
+  .door h2 { margin: 0 0 6px; font-size: 1.4rem; padding: 0; border: 0; }
+  .door p { margin: 0 0 16px; }
+  .go { color: var(--door); font-weight: 700; }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 12px 40px; list-style: none; margin: 40px 0 0; padding: 0; }
+  .stats li { display: flex; flex-direction: column; }
+  .stats b { font-size: 2rem; line-height: 1.1; color: var(--stat); font-variant-numeric: tabular-nums; }
+  .stats span { font-size: 0.9rem; color: var(--muted); }
+
+  .surprise { margin: 32px 0 0; }
+  @media (max-width: 480px) {
+    .me { width: 72px; height: 72px; }
+  }
 </style>

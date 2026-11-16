@@ -19,11 +19,19 @@ const skills = [
   },
   {
     group: 'Ownership & leadership',
-    items: ['Application ownership', 'Release management', 'Vulnerability remediation', 'Requirements & change analysis', 'SDLC documentation', 'Stakeholder demos', 'Code review', 'Agile / Scrum'],
+    items: ['Application ownership', 'Release management', 'Requirements & change analysis', 'SDLC documentation', 'Stakeholder demos', 'Code review', 'Agile / Scrum'],
   },
   {
     group: 'Community & people',
     items: ['Community outreach', 'Event planning', 'Program coordination', 'Volunteer coordination', 'Web content management', 'Tutoring & teaching'],
+  },
+  {
+    group: 'Web & front-end design',
+    items: ['HTML / CSS', 'Responsive design', 'TypeScript', 'React', 'Astro', 'Canvas game development'],
+  },
+  {
+    group: 'Security',
+    items: ['ISC2 Certified in Cybersecurity', 'Vulnerability remediation', 'SSL certificate management'],
   },
   {
     group: 'Creative',
@@ -81,6 +89,7 @@ const daily = [
 ];
 
 const honors = [
+  { title: 'ISC2 Certified in Cybersecurity (CC)', text: 'Entry-level cybersecurity certification from ISC2. Certified since 2026.', featured: true },
   { title: 'Dean\'s List', text: 'Kingsborough Community College and CUNY York College, 2014 to 2020.' },
   { title: 'CUNY Tech Prep Fellow', text: 'One of 183 students selected from 400+ applicants.' },
   { title: 'HackerRank group challenge', text: 'Winner, August 2020.' },
@@ -105,179 +114,322 @@ const rules = [
 ---
 
 <Base title="About" description="About Alamin Hossain: software engineer, community volunteer, organizer and lifelong learner.">
-  <div class="page">
-    <div class="container">
-      <h1>About</h1>
-      <p class="lead">
-        I'm a software engineer with the U.S. government, building and maintaining the financial
-        systems that the U.S. Postal Service depends on. Outside of work I give time to my community,
-        my camera and the trail.
-      </p>
-
-      <h2>Work</h2>
-      <p>
-        Since 2021 I've worked in Java, Spring Boot and Oracle PL/SQL. Today I'm a computer and
-        programmer analyst at the United States Postal Service, working on financial systems built on
-        Oracle E-Business Suite, plus the Java, database and CI/CD pipelines around them.
-      </p>
-      <p>
-        The U.S. Postal Service is an independent agency in the executive branch of the federal
-        government and pays its own way through postage and services. My team builds and maintains
-        the software that handles its financial operations and payments: the money going out, the
-        money coming in, and the records that tie it together.
-      </p>
-      <p>
-        Beyond writing code, I look after the application itself: planning what goes into each
-        release, tracking and fixing vulnerabilities, documenting every change across the SDLC, and
-        walking stakeholders through what changed and why. My day mixes development, DevOps, testing,
-        IT service management and a bit of project management.
-      </p>
-      <p>
-        What I enjoy most is the unglamorous part: taking something messy, finding out why it
-        breaks, and leaving it more reliable than I found it. You can see some of what I've built on
-        the <a href="/projects">Projects page</a>.
-      </p>
-
-      <details class="more">
-        <summary>A closer look at my work</summary>
-        <h3>What I do day to day</h3>
-        <ul class="plain">
-          {daily.map((d) => <li>{d}</li>)}
-        </ul>
-        <h3>The finance side</h3>
-        <p class="muted">
-          The platform is Oracle E-Business Suite, which keeps the finance data in one place and gives
-          us ready-made reporting. I touch Accounts Payable (paying suppliers), Accounts Receivable
-          (money owed to the organization), General Ledger (the central financial record) and Fixed
-          Assets (buildings, vehicles and equipment), mostly through reports, database changes and
-          testing.
+  <div class="page about">
+    <div class="container hero">
+      <div class="intro">
+        <h1>About</h1>
+        <p class="lead">
+          I'm a software engineer with the U.S. government, building and maintaining the financial
+          systems that the U.S. Postal Service depends on. Outside of work I give time to my community,
+          my camera and the trail.
         </p>
-      </details>
-
-      <aside class="callout card">
-        <p class="eyebrow">Giving back</p>
-        <h3>Board member, Resilience USA Foundation</h3>
-        <p class="muted">
-          I'm part of a Queens nonprofit that runs a monthly food drive, learning programs and
-          community events. I help with the food drives and events, join the learning programs when
-          I can, and attend the monthly board meetings. I'm proud to be part of it.
-        </p>
-        <p class="links">
-          <a href="/community">More about the foundation and my role →</a>
-          <a href={site.links.foundation} rel="noopener">Visit their website</a>
-        </p>
-      </aside>
-
-      <h2>How I got here</h2>
-      <p class="muted">
-        I took the long way around: a few jobs before software, and a lot of learning on the side.
-      </p>
-      <ol class="path">
-        {path.map((p) => (
-          <li>
-            <span class="when">{p.when}</span>
-            <div>
-              <h3>{p.title}</h3>
-              <p class="muted">{p.text}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-
-      <h2>Skills</h2>
-      <div class="skills">
-        {skills.map((s) => (
-          <div>
-            <h3>{s.group}</h3>
-            <ul class="tags">{s.items.map((i) => <li>{i}</li>)}</ul>
-          </div>
-        ))}
       </div>
 
-      <h2>Honors &amp; associations</h2>
-      <div class="grid">
-        {honors.map((h) => (
-          <article class="card">
-            <h3>{h.title}</h3>
-            <p class="muted">{h.text}</p>
-          </article>
-        ))}
+      <div class="flipwrap">
+        <button type="button" class="flip" id="flip" aria-label="Flip the photo to see another side of me">
+          <span class="inner">
+            <span class="face front"><img src="/me/pro.jpg" width="600" height="800" alt="Alamin Hossain in a suit and tie" /></span>
+            <span class="face back"><img id="flip-back" src="/me/fun-1.jpg" width="600" height="800" alt="Alamin on a trip, photo 1" /></span>
+          </span>
+        </button>
+        <p class="hint muted">Hover or tap to flip</p>
       </div>
-
-      <h2>What drives me</h2>
-      <p>
-        I want a career that keeps challenging me, where I can put my computer science and
-        programming skills to work, communicate well and keep growing. Underneath it all is a simple
-        urge to make the world a little better.
-      </p>
-      <blockquote>Sometimes success depends on how strong the promises are.</blockquote>
-
-      <h2>What I'm like</h2>
-      <div class="grid">
-        {strengths.map((s) => (
-          <article class="card">
-            <h3>{s.title}</h3>
-            <p class="muted">{s.text}</p>
-          </article>
-        ))}
-      </div>
-      <p>
-        My honest weakness is that I want to know everything and I can't move on until a thing is
-        finished. One unfinished task knocks into the next like dominoes. I'm learning to let good be
-        good enough, though not always.
-      </p>
-
-      <h2>Off the clock</h2>
-      <p>
-        I love hiking, traveling and finding a good park. I take photos with my DSLR and make videos
-        for <a href={site.links.youtube} rel="noopener">YouTube</a>. I play games on my PS5 and watch
-        more movies than I should. I read, and I like cleaning and organizing: it clears my mind and
-        resets my body as much as a walk does.
-      </p>
-      <p>
-        If you want to see more of that side, <a href="/arcade">play a game</a> or
-        <a href="/travel">see where I like to go</a>.
-      </p>
-
-      <h2>My simple rules for peace</h2>
-      <p class="muted">Four habits I try to live by. Some days I do better than others.</p>
-      <div class="grid">
-        {rules.map((r) => (
-          <article class="card">
-            <h3>{r.title}</h3>
-            <p class="muted">{r.text}</p>
-          </article>
-        ))}
-      </div>
-      <p>And above all, I trust in God.</p>
     </div>
+
+    <nav class="spy" aria-label="On this page">
+      <div class="container">
+        <ul>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#journey">Journey</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#honors">Honors</a></li>
+          <li><a href="#me">Me</a></li>
+          <li><a href="#peace">Peace</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <section class="band" id="work">
+      <div class="container">
+        <h2>Work</h2>
+        <p>
+          Since 2021 I've worked in Java, Spring Boot and Oracle PL/SQL. Today I'm a computer and
+          programmer analyst at the United States Postal Service, working on financial systems built on
+          Oracle E-Business Suite, plus the Java, database and CI/CD pipelines around them.
+        </p>
+        <p>
+          The U.S. Postal Service is an independent agency in the executive branch of the federal
+          government and pays its own way through postage and services. My team builds and maintains
+          the software that handles its financial operations and payments: the money going out, the
+          money coming in, and the records that tie it together.
+        </p>
+        <p>
+          Beyond writing code, I look after the application itself: planning what goes into each
+          release, tracking and fixing vulnerabilities, documenting every change across the SDLC, and
+          walking stakeholders through what changed and why. My day mixes development, DevOps, testing,
+          IT service management and a bit of project management.
+        </p>
+        <p>
+          What I enjoy most is the unglamorous part: taking something messy, finding out why it
+          breaks, and leaving it more reliable than I found it. You can see some of what I've built on
+          the <a href="/projects">Projects page</a>.
+        </p>
+
+        <details class="more">
+          <summary>A closer look at my work</summary>
+          <h3>What I do day to day</h3>
+          <ul class="plain">
+            {daily.map((d) => <li>{d}</li>)}
+          </ul>
+          <h3>The finance side</h3>
+          <p class="muted">
+            The platform is Oracle E-Business Suite, which keeps the finance data in one place and gives
+            us ready-made reporting. I touch Accounts Payable (paying suppliers), Accounts Receivable
+            (money owed to the organization), General Ledger (the central financial record) and Fixed
+            Assets (buildings, vehicles and equipment), mostly through reports, database changes and
+            testing.
+          </p>
+        </details>
+
+        <aside class="callout card">
+          <p class="eyebrow">Giving back</p>
+          <h3>Board member, Resilience USA Foundation</h3>
+          <p class="muted">
+            I'm part of a Queens nonprofit that runs a monthly food drive, learning programs and
+            community events. I help with the food drives and events, join the learning programs when
+            I can, and attend the monthly board meetings. I'm proud to be part of it.
+          </p>
+          <p class="links">
+            <a href="/community">More about the foundation and my role →</a>
+            <a href={site.links.foundation} rel="noopener">Visit their website</a>
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="band" id="journey">
+      <div class="container">
+        <h2>How I got here</h2>
+        <p class="muted">
+          I took the long way around: a few jobs before software, and a lot of learning on the side.
+        </p>
+        <ol class="path">
+          {path.map((p) => (
+            <li>
+              <span class="when">{p.when}</span>
+              <div>
+                <h3>{p.title}</h3>
+                <p class="muted">{p.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="band" id="skills">
+      <div class="container">
+        <h2>Skills</h2>
+        <div class="skills">
+          {skills.map((s) => (
+            <div>
+              <h3>{s.group}</h3>
+              <ul class="tags">{s.items.map((i) => <li>{i}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="honors">
+      <div class="container">
+        <h2>Honors &amp; associations</h2>
+        <div class="grid">
+          {honors.map((h) => (
+            <article class={h.featured ? 'card featured' : 'card'}>
+              {h.featured && <span class="badge">Newest</span>}
+              <h3>{h.title}</h3>
+              <p class="muted">{h.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="me">
+      <div class="container">
+        <h2>What drives me</h2>
+        <p>
+          I want a career that keeps challenging me, where I can put my computer science and
+          programming skills to work, communicate well and keep growing. Underneath it all is a simple
+          urge to make the world a little better.
+        </p>
+        <blockquote>Sometimes success depends on how strong the promises are.</blockquote>
+
+        <h2>What I'm like</h2>
+        <div class="grid two">
+          {strengths.map((s) => (
+            <article class="card">
+              <h3>{s.title}</h3>
+              <p class="muted">{s.text}</p>
+            </article>
+          ))}
+        </div>
+        <p>
+          My honest weakness is that I want to know everything and I can't move on until a thing is
+          finished. One unfinished task knocks into the next like dominoes. I'm learning to let good be
+          good enough, though not always.
+        </p>
+
+        <h2>Off the clock</h2>
+        <p>
+          I love hiking, traveling and finding a good park. I take photos with my DSLR and make videos
+          for <a href={site.links.youtube} rel="noopener">YouTube</a>. I play games on my PS5 and watch
+          more movies than I should. I read, and I like cleaning and organizing: it clears my mind and
+          resets my body as much as a walk does.
+        </p>
+        <p>
+          If you want to see more of that side, <a href="/arcade">play a game</a> or
+          <a href="/travel">see where I like to go</a>.
+        </p>
+      </div>
+    </section>
+
+    <section class="band" id="peace">
+      <div class="container">
+        <h2>My simple rules for peace</h2>
+        <p class="muted">Four habits I try to live by. Some days I do better than others.</p>
+        <div class="grid two">
+          {rules.map((r) => (
+            <article class="card">
+              <h3>{r.title}</h3>
+              <p class="muted">{r.text}</p>
+            </article>
+          ))}
+        </div>
+        <p>And above all, I trust in God.</p>
+      </div>
+    </section>
   </div>
 </Base>
 
-<style>
-  .skills { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-  .skills h3 { font-size: 0.95rem; color: var(--muted); font-weight: 600; margin: 0; }
+<script>
+  // Flip card: hover on a mouse, tap or Enter elsewhere. Each time it flips to the back it
+  // shows a different fun photo.
+  const flip = document.getElementById('flip') as HTMLButtonElement | null;
+  const back = document.getElementById('flip-back') as HTMLImageElement | null;
+  if (flip && back) {
+    const COUNT = 6;
+    let n = 0;
+    let lastType = 'mouse';
+    const showBack = () => {
+      back.src = `/me/fun-${n + 1}.jpg`;
+      back.alt = `Alamin on a trip, photo ${n + 1}`;
+      n = (n + 1) % COUNT;
+      new Image().src = `/me/fun-${n + 1}.jpg`; // preload the next one
+      flip.classList.add('flipped');
+    };
+    const showFront = () => flip.classList.remove('flipped');
+    flip.addEventListener('pointerenter', (e) => { lastType = e.pointerType; if (e.pointerType === 'mouse') showBack(); });
+    flip.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') showFront(); });
+    flip.addEventListener('click', (e) => {
+      if (e.detail !== 0 && lastType === 'mouse') return; // hover already handled it
+      flip.classList.contains('flipped') ? showFront() : showBack();
+    });
+  }
 
-  .callout { margin: 32px 0 0; border-left: 4px solid var(--accent); }
+  // Highlight the section you are reading in the sticky menu.
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.spy a'));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        links.forEach((a) => {
+          if (a.getAttribute('href') === `#${e.target.id}`) a.setAttribute('aria-current', 'true');
+          else a.removeAttribute('aria-current');
+        });
+      }
+    }, { rootMargin: '-35% 0px -60% 0px' });
+    document.querySelectorAll('section.band').forEach((s) => io.observe(s));
+  }
+</script>
+
+<style>
+  .about { padding: 0; }
+
+  .hero { display: grid; gap: 28px 40px; grid-template-columns: 1fr auto; align-items: center; padding-top: 56px; padding-bottom: 36px; }
+  .hero .lead { margin: 0; font-size: 1.15rem; color: var(--muted); max-width: 60ch; }
+  @media (max-width: 680px) {
+    .hero { grid-template-columns: 1fr; }
+    .flipwrap { justify-self: center; }
+  }
+
+  .flipwrap { text-align: center; }
+  .flip { display: block; width: 210px; aspect-ratio: 3 / 4; padding: 0; border: 0; background: none; cursor: pointer; perspective: 900px; }
+  .inner { display: block; position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+  .flip.flipped .inner { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0; display: block; overflow: hidden; border-radius: 18px;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border: 3px solid var(--surface); box-shadow: 0 0 0 3px var(--area), 0 12px 28px rgba(0, 0, 0, 0.22);
+  }
+  .face img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .back { transform: rotateY(180deg); }
+  .hint { margin: 10px 0 0; font-size: 0.8rem; }
+
+  .spy {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .spy ul { display: flex; gap: 6px; list-style: none; margin: 0; padding: 10px 0; overflow-x: auto; white-space: nowrap; }
+  .spy a { display: block; padding: 4px 14px; border-radius: 999px; color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+  .spy a:hover { text-decoration: none; color: var(--text); background: color-mix(in srgb, var(--area) 14%, transparent); }
+  .spy a[aria-current='true'] { color: var(--text); background: color-mix(in srgb, var(--area) 22%, transparent); }
+
+  .band { padding: 48px 0 52px; scroll-margin-top: 56px; }
+  .band:nth-of-type(even) { background: color-mix(in srgb, var(--area) 6%, var(--bg)); }
+  .band h2:first-child { margin-top: 0; }
+  .grid.two { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+  @media (max-width: 420px) { .grid.two { grid-template-columns: 1fr; } }
+
+  .skills { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .skills h3 { font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--area); }
+  .skills > div:nth-child(4n + 1) { --area: var(--c-about); }
+  .skills > div:nth-child(4n + 2) { --area: var(--c-work); }
+  .skills > div:nth-child(4n + 3) { --area: var(--c-travel); }
+  .skills > div:nth-child(4n + 4) { --area: var(--c-arcade); }
+
+  .callout { margin: 32px 0 0; border-left: 4px solid var(--area); }
   .callout .eyebrow {
     margin: 0 0 4px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
-    text-transform: uppercase; color: var(--accent);
+    text-transform: uppercase; color: var(--area);
   }
   .callout h3 { font-size: 1.2rem; margin: 0 0 8px; }
   .callout p { margin: 0 0 10px; }
   .callout .links { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; font-weight: 600; }
 
   .path { list-style: none; margin: 20px 0 0; padding: 0 0 0 20px; border-left: 2px solid var(--border); }
-  .path li { position: relative; display: grid; gap: 2px 20px; grid-template-columns: 110px 1fr; padding: 0 0 22px; }
+  .path li { position: relative; display: grid; gap: 2px 20px; grid-template-columns: 110px 1fr; padding: 8px 12px 14px; margin: 0 0 6px; border-radius: var(--radius); transition: background 0.15s; }
   .path li::before {
-    content: ''; position: absolute; left: -27px; top: 7px; width: 12px; height: 12px;
-    border-radius: 50%; background: var(--accent); border: 2px solid var(--bg);
+    content: ''; position: absolute; left: -33px; top: 15px; width: 12px; height: 12px;
+    border-radius: 50%; background: var(--area); border: 2px solid var(--bg); transition: transform 0.15s;
   }
-  .path .when { font-size: 0.85rem; font-weight: 600; color: var(--muted); padding-top: 2px; }
+  .path li:hover { background: color-mix(in srgb, var(--area) 9%, transparent); }
+  .path li:hover::before { transform: scale(1.5); }
+  .path .when { font-size: 0.85rem; font-weight: 700; color: var(--area); padding-top: 2px; }
   .path h3 { margin: 0 0 4px; }
   .path p { margin: 0; }
   @media (max-width: 560px) {
     .path li { grid-template-columns: 1fr; }
+  }
+
+  .featured { position: relative; border-top: 4px solid var(--c-travel); }
+  .badge {
+    position: absolute; top: 12px; right: 12px; padding: 1px 8px; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase; border-radius: 999px;
+    background: color-mix(in srgb, var(--c-travel) 18%, transparent); color: var(--c-travel);
   }
 
   .more { margin: 24px 0 0; border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); padding: 4px 20px 16px; }
@@ -287,7 +439,7 @@ const rules = [
   .plain li { margin-bottom: 8px; }
 
   blockquote {
-    margin: 20px 0 0; padding: 4px 0 4px 18px; border-left: 3px solid var(--border);
+    margin: 20px 0 0; padding: 4px 0 4px 18px; border-left: 3px solid var(--area);
     font-size: 1.15rem; font-style: italic; color: var(--muted);
   }
 </style>

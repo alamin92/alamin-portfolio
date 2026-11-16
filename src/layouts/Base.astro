@@ -11,6 +11,13 @@ interface Props {
 
 const { title, description = site.description } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : site.name;
+
+// Each section of the site gets its own accent color (see global.css).
+const p = Astro.url.pathname;
+const area = p.startsWith('/arcade') ? 'arcade'
+  : p.startsWith('/travel') || p === '/gallery' ? 'travel'
+  : p.startsWith('/about') || p.startsWith('/community') ? 'about'
+  : 'work';
 ---
 
 <!doctype html>
@@ -25,7 +32,7 @@ const fullTitle = title ? `${title} · ${site.name}` : site.name;
     <meta property="og:type" content="website" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
-  <body>
+  <body data-area={area}>
     <Header />
     <main>
       <slot />

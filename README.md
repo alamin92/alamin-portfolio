@@ -19,7 +19,7 @@ npm run preview  # serve the built site
 - `src/data/photos.ts`: photo albums manifest
 - `src/scripts/`: game logic
 - `public/photos/`: web-sized photos (originals stay local in `photos/`, git-ignored)
-
+- `public/me/`: portraits for the Home and About pages (the About photo flips between a professional shot and trip shots)
 ## Planned
 
 A second arcade game, trophies, resume page, hosting on Cloudflare Pages.

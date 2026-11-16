@@ -9,3 +9,7 @@ dist/
 # Local source material (originals, raw Google Maps export). Web-sized copies live in public/photos.
 /photos/
 /PlacesToGO/
+/CertificateEdu/
+/prophotos/
+/othermephotos/
+/ruby and tiki/

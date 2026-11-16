@@ -20,7 +20,7 @@ import { albums } from '../../data/photos';
           <div class="wall">
             {a.photos.map((p, i) => (
               <button type="button" class="shot" data-album={a.slug} data-index={i} aria-label={`Open photo ${i + 1} of ${a.photos.length} in ${a.title}`}>
-                <img src={p.thumb} width={p.tw} height={p.th} alt={`${a.title}, photo ${i + 1}`} loading="lazy" decoding="async" />
+                <img src={p.thumb} width={p.tw} height={p.th} alt={`${p.caption ?? a.title}, photo ${i + 1}`} loading="lazy" decoding="async" />
               </button>
             ))}
           </div>
@@ -37,11 +37,11 @@ import { albums } from '../../data/photos';
     <p id="lb-cap"></p>
   </dialog>
 
-  <script id="album-data" type="application/json" set:html={JSON.stringify(albums.map((a) => ({ slug: a.slug, title: a.title, photos: a.photos.map((p) => ({ src: p.src, w: p.w, h: p.h })) })))} />
+  <script id="album-data" type="application/json" set:html={JSON.stringify(albums.map((a) => ({ slug: a.slug, title: a.title, photos: a.photos.map((p) => ({ src: p.src, w: p.w, h: p.h, caption: p.caption })) })))} />
 </Base>
 
 <script>
-  type A = { slug: string; title: string; photos: { src: string; w: number; h: number }[] };
+  type A = { slug: string; title: string; photos: { src: string; w: number; h: number; caption?: string }[] };
   const data: A[] = JSON.parse(document.getElementById('album-data')!.textContent || '[]');
   const dlg = document.getElementById('lightbox') as HTMLDialogElement;
   const img = document.getElementById('lb-img') as HTMLImageElement;
@@ -53,8 +53,8 @@ import { albums } from '../../data/photos';
     if (!album) return;
     const p = album.photos[idx];
     img.src = p.src;
-    img.alt = `${album.title}, photo ${idx + 1}`;
-    cap.textContent = `${album.title} · ${idx + 1} / ${album.photos.length}`;
+    img.alt = `${p.caption ?? album.title}, photo ${idx + 1}`;
+    cap.textContent = `${p.caption ? p.caption + ' · ' : ''}${album.title} · ${idx + 1} / ${album.photos.length}`;
     // Preload the neighbours so next/prev feels instant.
     for (const j of [idx - 1, idx + 1]) {
       const n = album.photos[j];
@@ -100,7 +100,7 @@ import { albums } from '../../data/photos';
     font-size: 0.85rem; padding: 4px 12px; border: 1px solid var(--border);
     border-radius: 999px; color: var(--muted); background: var(--surface);
   }
-  .chips a:hover { text-decoration: none; border-color: var(--accent); color: var(--text); }
+  .chips a:hover { text-decoration: none; border-color: var(--area); color: var(--text); }
   section { scroll-margin-top: 16px; }
   .wall { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
   .shot { padding: 0; border: 0; background: var(--border); border-radius: 8px; overflow: hidden; cursor: zoom-in; aspect-ratio: 4 / 3; }
